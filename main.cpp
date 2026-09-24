@@ -158,16 +158,16 @@ int main( int argc, char * argv[] )
     totalInterest = 0;
     
 
-    monthlyInterestRate = yearly_interest_rate / 12;
-    monthlyInterestRate /= 100;
+    double monthlyRatePercent = yearly_interest_rate / 12;
+	monthlyInterestRate = monthlyRatePercent / 100;
 
 	if (!validLoan(loan_amount, monthlyInterestRate, monthly_payment)) {
-		cout << "Insufficient payment" << endl;
+		cout << "(Insufficient payment): " << argv[1] << " " << argv[2] << " " << argv[3] << endl;
 		return -1;
 	}
 
-    
-
+    print_header();
+	print_row0(loan_amount);
 
     while (loan_amount > monthly_payment) { //while loop calculating payments month by month
         month++;
@@ -177,7 +177,7 @@ int main( int argc, char * argv[] )
 		totalInterest += interestPayment;
 		loan_amount -= principle;
         
-		//format output
+		print_row(month, loan_amount, monthly_payment, monthlyRatePercent, interestPayment, principle);
         
 	}
 
@@ -190,7 +190,8 @@ int main( int argc, char * argv[] )
     principle = loan_amount;
     loan_amount = 0;
     
-	//print final payment
+	print_row(month, loan_amount, finalPayment, monthlyRatePercent, interestPayment, principle);
+	print_footer(month, totalInterest);
 
 	
 	return 0;
