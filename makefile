@@ -3,7 +3,7 @@ CC=g++
 DEPS = starter.h
 
 main: main.cpp
-	g++ -o main main.cpp
+	g++ main.cpp
 
 clean: 
-	rm -f main
+	rm -f a.out
