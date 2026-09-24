@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <stdexcept>
 
+
 using namespace std;
 
 std::string const labels[3] = {"Invalid loan", "Invalid interest rate", "Invalid payment"};
@@ -69,6 +70,30 @@ void print_footer(int months, double interest_total) {
 		<< "\n\n";
 }
 
+bool validLoan(double loan_amount, double monthlyInterestRate, double monthly_payment) {
+	double interestPayment = loan_amount * monthlyInterestRate;
+
+	if (monthly_payment <= interestPayment) {
+		return false;
+	}
+
+	return true;
+}
+
+double calculatePayment (double loan_amount, double monthlyInterestRate, double monthly_payment) {
+	double interestPayment = loan_amount * monthlyInterestRate;
+	double principle = monthly_payment - interestPayment;
+
+	return principle;
+}
+
+double calcFinalPayment (double loan_amount, double monthlyInterestRate) {
+	double interestPayment = loan_amount * monthlyInterestRate;
+	double finalPayment = loan_amount + interestPayment;
+
+	return finalPayment;
+}
+
 //pass in space-delimited arguments when you call the executable
 //Example: ./a.out 1 2 3.3
 int main( int argc, char * argv[] )
@@ -122,8 +147,51 @@ int main( int argc, char * argv[] )
 		return -1;
 	}
 	double loan_amount = values[0];
-	double interest = values[1];
-	double monthly = values[2];
+	double yearly_interest_rate = values[1];
+	double monthly_payment = values[2];
 
+	double principle, monthlyInterestRate, interestPayment, totalInterest;
+    int month = 0;
+
+	
+    
+    totalInterest = 0;
+    
+
+    monthlyInterestRate = yearly_interest_rate / 12;
+    monthlyInterestRate /= 100;
+
+	if (!validLoan(loan_amount, monthlyInterestRate, monthly_payment)) {
+		cout << "Insufficient payment" << endl;
+		return -1;
+	}
+
+    
+
+
+    while (loan_amount > monthly_payment) { //while loop calculating payments month by month
+        month++;
+		principle = calculatePayment(loan_amount, monthlyInterestRate, monthly_payment);
+		interestPayment = loan_amount * monthlyInterestRate;
+
+		totalInterest += interestPayment;
+		loan_amount -= principle;
+        
+		//format output
+        
+	}
+
+	// final payment made
+	month++;
+    interestPayment = loan_amount * monthlyInterestRate; //calculate final payment
+	double finalPayment = calcFinalPayment(loan_amount, monthlyInterestRate);
+
+    totalInterest += interestPayment;
+    principle = loan_amount;
+    loan_amount = 0;
+    
+	//print final payment
+
+	
 	return 0;
 }
